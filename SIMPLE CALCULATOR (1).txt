@@ -1,0 +1,74 @@
+import tkinter as tk
+from tkinter import messagebox
+
+# Function to add a task
+def add_task():
+    task = entry_task.get()
+    if task != "":
+        listbox_tasks.insert(tk.END, task)
+        entry_task.delete(0, tk.END)
+    else:
+        messagebox.showwarning("Warning", "Please enter a task.")
+
+# Function to delete a selected task
+def delete_task():
+    try:
+        selected_task_index = listbox_tasks.curselection()[0]
+        listbox_tasks.delete(selected_task_index)
+    except IndexError:
+        messagebox.showwarning("Warning", "Please select a task to delete.")
+
+# Function to mark a selected task as done
+def mark_done():
+    try:
+        selected_task_index = listbox_tasks.curselection()[0]
+        task = listbox_tasks.get(selected_task_index)
+        listbox_tasks.delete(selected_task_index)
+        listbox_tasks.insert(tk.END, f"✔️ {task}")
+    except IndexError:
+        messagebox.showwarning("Warning", "Please select a task to mark as done.")
+
+# Function to clear all tasks
+def clear_tasks():
+    if messagebox.askyesno("Confirm", "Are you sure you want to clear all tasks?"):
+        listbox_tasks.delete(0, tk.END)
+
+# Main window
+root = tk.Tk()
+root.title("📝 To-Do List")
+
+# Set window size
+root.geometry("400x400")
+root.configure(bg="#f0f0f0")
+
+# Title label
+label_title = tk.Label(root, text="My To-Do List", font=("Helvetica", 16, "bold"), bg="#f0f0f0")
+label_title.pack(pady=10)
+
+# Entry for new task
+entry_task = tk.Entry(root, width=30, font=("Helvetica", 12))
+entry_task.pack(pady=5)
+
+# Frame for buttons
+frame_buttons = tk.Frame(root, bg="#f0f0f0")
+frame_buttons.pack(pady=5)
+
+# Buttons
+button_add = tk.Button(frame_buttons, text="Add Task", width=10, command=add_task)
+button_add.grid(row=0, column=0, padx=5)
+
+button_delete = tk.Button(frame_buttons, text="Delete Task", width=10, command=delete_task)
+button_delete.grid(row=0, column=1, padx=5)
+
+button_done = tk.Button(frame_buttons, text="Mark Done", width=10, command=mark_done)
+button_done.grid(row=0, column=2, padx=5)
+
+button_clear = tk.Button(root, text="Clear All Tasks", width=35, command=clear_tasks)
+button_clear.pack(pady=10)
+
+# Listbox to display tasks
+listbox_tasks = tk.Listbox(root, width=50, height=10, selectmode=tk.SINGLE, font=("Helvetica", 12))
+listbox_tasks.pack(pady=10)
+
+# Run the application
+root.mainloop() 
